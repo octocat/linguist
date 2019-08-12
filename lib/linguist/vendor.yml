@@ -15,10 +15,11 @@
 # Dependencies
 - ^[Dd]ependencies/
 
+# Distributions
+- (^|/)dist/
+
 # C deps
-#  https://github.com/joyent/node
 - ^deps/
-- ^tools/
 - (^|/)configure$
 - (^|/)config.guess$
 - (^|/)config.sub$
@@ -47,6 +48,12 @@
 # Go dependencies
 - Godeps/_workspace/
 
+# Go fixtures
+- (^|/)testdata/
+
+# GNU indent profiles
+- .indent.pro
+
 # Minified JavaScript and CSS
 - (\.|-)min\.(js|css)$
 
@@ -58,7 +65,8 @@
 - (^|/)custom\.bootstrap([^\s]*)(js|css|less|scss|styl)$
 
 # Font Awesome
-- (^|/)font-awesome\.(css|less|scss|styl)$
+- (^|/)font-?awesome\.(css|less|scss|styl)$
+- (^|/)font-?awesome/.*\.(css|less|scss|styl)$
 
 # Foundation css
 - (^|/)foundation\.(css|less|scss|styl)$
@@ -66,15 +74,26 @@
 # Normalize.css
 - (^|/)normalize\.(css|less|scss|styl)$
 
+# Skeleton.css
+- (^|/)skeleton\.(css|less|scss|styl)$
+
 # Bourbon css
 - (^|/)[Bb]ourbon/.*\.(css|less|scss|styl)$
 
 # Animate.css
 - (^|/)animate\.(css|less|scss|styl)$
 
+# Materialize.css
+- (^|/)materialize\.(css|less|scss|styl|js)$
+
+# Select2
+- (^|/)select2/.*\.(css|scss|js)$
+
+# Bulma css
+- (^|/)bulma\.(css|sass|scss)$
+
 # Vendored dependencies
-- third[-_]?party/
-- 3rd[-_]?party/
+- (3rd|[Tt]hird)[-_]?[Pp]arty/
 - vendors?/
 - extern(al)?/
 - (^|/)[Vv]+endor/
@@ -110,6 +129,15 @@
 # jQuery File Upload
 - (^|/)jquery\.fileupload(-\w+)?\.js$
 
+# jQuery dataTables
+- jquery.dataTables.js
+
+# bootboxjs
+- bootbox.js
+
+# pdf-worker
+- pdf.worker.js
+
 # Slick
 - (^|/)slick\.\w+.js$
 
@@ -125,6 +153,9 @@
 # Sublime Text workspace files
 - .sublime-project
 - .sublime-workspace
+
+# VS Code workspace files
+- .vscode
 
 # Prototype
 - (^|/)prototype(.*)\.js$
@@ -165,7 +196,7 @@
 # Chart.js
 - (^|/)Chart\.js$
 
-# Codemirror
+# CodeMirror
 - (^|/)[Cc]ode[Mm]irror/(\d+\.\d+/)?(lib|mode|theme|addon|keymap|demo)
 
 # SyntaxHighlighter - http://alexgorbatchev.com/
@@ -181,6 +212,9 @@
 
 # React
 - (^|/)react(-[^.]*)?\.js$
+
+# flow-typed
+- (^|/)flow-typed/.*\.js$
 
 # Modernizr
 - (^|/)modernizr\-\d\.\d+(\.\d+)?\.js$
@@ -215,10 +249,7 @@
 - \.imageset/
 
 # Carthage
-- ^Carthage/
-
-# Cocoapods
-- ^Pods/
+- (^|/)Carthage/
 
 # Sparkle
 - (^|/)Sparkle/
@@ -228,6 +259,15 @@
 
 # Fabric
 - Fabric.framework/
+
+# BuddyBuild
+- BuddyBuildSDK.framework/
+
+# Realm
+- Realm.framework
+
+# RealmSwift
+- RealmSwift.framework
 
 # git config files
 - gitattributes$
@@ -240,6 +280,13 @@
 - (^|/)gradlew$
 - (^|/)gradlew\.bat$
 - (^|/)gradle/wrapper/
+
+## Java ##
+
+# Maven
+- (^|/)mvnw$
+- (^|/)mvnw\.cmd$
+- (^|/)\.mvn/wrapper/
 
 ## .NET ##
 

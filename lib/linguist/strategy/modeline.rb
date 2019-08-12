@@ -1,19 +1,98 @@
 module Linguist
   module Strategy
     class Modeline
-      EMACS_MODELINE = /-\*-\s*(?:(?!mode)[\w-]+\s*:\s*(?:[\w+-]+)\s*;?\s*)*(?:mode\s*:)?\s*([\w+-]+)\s*(?:;\s*(?!mode)[\w-]+\s*:\s*[\w+-]+\s*)*;?\s*-\*-/i
+      EMACS_MODELINE = /
+        -\*-
+        (?:
+          # Short form: `-*- ruby -*-`
+          \s* (?= [^:;\s]+ \s* -\*-)
+          |
+          # Longer form: `-*- foo:bar; mode: ruby; -*-`
+          (?:
+            .*?       # Preceding variables: `-*- foo:bar bar:baz;`
+            [;\s]     # Which are delimited by spaces or semicolons
+            |
+            (?<=-\*-) # Not preceded by anything: `-*-mode:ruby-*-`
+          )
+          mode        # Major mode indicator
+          \s*:\s*     # Allow whitespace around colon: `mode : ruby`
+        )
+        ([^:;\s]+)    # Name of mode
 
-      # First form vim modeline
-      # [text]{white}{vi:|vim:|ex:}[white]{options}
-      # ex: 'vim: syntax=ruby'
-      VIM_MODELINE_1 = /(?:vim|vi|ex):\s*(?:ft|filetype|syntax)=(\w+)\s?/i
+        # Ensure the mode is terminated correctly
+        (?=
+          # Followed by semicolon or whitespace
+          [\s;]
+          |
+          # Touching the ending sequence: `ruby-*-`
+          (?<![-*])   # Don't allow stuff like `ruby--*-` to match; it'll invalidate the mode
+          -\*-        # Emacs has no problems reading `ruby --*-`, however.
+        )
+        .*?           # Anything between a cleanly-terminated mode and the ending -*-
+        -\*-
+      /xi
 
-      # Second form vim modeline (compatible with some versions of Vi)
-      # [text]{white}{vi:|vim:|Vim:|ex:}[white]se[t] {options}:[text]
-      # ex: 'vim set syntax=ruby:'
-      VIM_MODELINE_2 = /(?:vim|vi|Vim|ex):\s*se(?:t)?.*\s(?:ft|filetype|syntax)=(\w+)\s?.*:/i
+      VIM_MODELINE   = /
 
-      MODELINES = [EMACS_MODELINE, VIM_MODELINE_1, VIM_MODELINE_2]
+        # Start modeline. Could be `vim:`, `vi:` or `ex:`
+        (?:
+          (?:[ \t]|^)
+          vi
+          (?:m[<=>]?\d+|m)? # Version-specific modeline
+          |
+          [\t\x20] # `ex:` requires whitespace, because "ex:" might be short for "example:"
+          ex
+        )
+
+        # If the option-list begins with `set ` or `se `, it indicates an alternative
+        # modeline syntax partly-compatible with older versions of Vi. Here, the colon
+        # serves as a terminator for an option sequence, delimited by whitespace.
+        (?=
+          # So we have to ensure the modeline ends with a colon
+          : (?=[ \t]* set? [ \t] [^\n:]+ :) |
+
+          # Otherwise, it isn't valid syntax and should be ignored
+          : (?![ \t]* set? [ \t])
+        )
+
+        # Possible (unrelated) `option=value` pairs to skip past
+        (?:
+          # Option separator. Vim uses whitespace or colons to separate options (except if
+          # the alternate "vim: set " form is used, where only whitespace is used)
+          (?:
+            [ \t]
+            |
+            [ \t]* : [ \t]* # Note that whitespace around colons is accepted too:
+          )                 # vim: noai :  ft=ruby:noexpandtab
+
+          # Option's name. All recognised Vim options have an alphanumeric form.
+          \w*
+
+          # Possible value. Not every option takes an argument.
+          (?:
+            # Whitespace between name and value is allowed: `vim: ft   =ruby`
+            [ \t]*=
+
+            # Option's value. Might be blank; `vim: ft= ` says "use no filetype".
+            (?:
+              [^\\[ \t]] # Beware of escaped characters: titlestring=\ ft=ruby
+              |          # will be read by Vim as { titlestring: " ft=ruby" }.
+              \\.
+            )*
+          )?
+        )*
+
+        # The actual filetype declaration
+        [[ \t]:] (?:filetype|ft|syntax) [ \t]*=
+
+        # Language's name
+        (\w+)
+
+        # Ensure it's followed by a legal separator
+        (?=[ \t]|:|$)
+      /xi
+
+      MODELINES = [EMACS_MODELINE, VIM_MODELINE]
 
       # Scope of the search for modelines
       # Number of lines to check at the beginning and at the end of the file
@@ -30,8 +109,10 @@ module Linguist
       # Returns an Array with one Language if the blob has a Vim or Emacs modeline
       # that matches a Language name or alias. Returns an empty array if no match.
       def self.call(blob, _ = nil)
-        header = blob.lines.first(SEARCH_SCOPE).join("\n")
-        footer = blob.lines.last(SEARCH_SCOPE).join("\n")
+        return [] if blob.symlink?
+
+        header = blob.first_lines(SEARCH_SCOPE).join("\n")
+        footer = blob.last_lines(SEARCH_SCOPE).join("\n")
         Array(Language.find_by_alias(modeline(header + footer)))
       end
 

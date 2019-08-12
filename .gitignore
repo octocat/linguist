@@ -1,8 +1,14 @@
+*.gem
 /Gemfile.lock
 .bundle/
+.idea
 benchmark/
 lib/linguist/samples.json
 /grammars
 /node_modules
 test/fixtures/ace_modes.json
 /vendor/gems/
+/tmp
+*.bundle
+*.so
+linguist-grammars*
