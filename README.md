@@ -33,7 +33,7 @@ $ cat .gitattributes
 *.rb linguist-language=Java
 ```
 
-Checking code you didn't write, such as JavaScript libraries, into your git repo is a common practice, but this often inflates your project's language stats and may even cause your project to be labeled as another language. By default, Linguist treats all of the paths defined in [lib/linguist/vendor.yml](https://github.com/github/linguist/blob/master/lib/linguist/vendor.yml) as vendored and therefore doesn't include them in the language statistics for a repository.
+Checking code you didn't write, such as JavaScript libraries, into your git repo is a common practice, but this often inflates your project's language stats and may even cause your project to be labelled as another language. By default, Linguist treats all of the paths defined in [lib/linguist/vendor.yml](https://github.com/github/linguist/blob/master/lib/linguist/vendor.yml) as vendored and therefore doesn't include them in the language statistics for a repository.
 
 Use the `linguist-vendored` attribute to vendor or un-vendor paths.
 
@@ -55,7 +55,7 @@ docs/formatter.rb linguist-documentation=false
 
 #### Generated file detection
 
-Not all plain text files are true source files. Generated files like minified js and compiled CoffeeScript can be detected and excluded from language stats. As an added bonus, unlike vendored and documentation files, these files are suppressed in diffs.
+Not all plain text files are true source files. Generated files like minified js and compiled CoffeeScript can be detected and excluded from language stats. As a bonus these files are suppressed in diffs, unlike vendored and documentation files.
 
 ```ruby
 Linguist::FileBlob.new("underscore.min.js").generated? # => true
