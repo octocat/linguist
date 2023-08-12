@@ -33,7 +33,7 @@ $ cat .gitattributes
 *.rb linguist-language=Java
 ```
 
-Checking code you didn't write, such as JavaScript libraries, into your git repo is a common practice, but this often inflates your project's language stats and may even cause your project to be labeled as another language. By default, Linguist treats all of the paths defined in [lib/linguist/vendor.yml](https://github.com/github/linguist/blob/master/lib/linguist/vendor.yml) as vendored and therefore doesn't include them in the language statistics for a repository.
+Checking code you didn't write, such as JavaScript libraries, into your git repo is a common practice, but this often inflates your project's language stats and may even cause your project to be labeled as another language. By default, Linguist treats all of the paths defined in [lib/linguist/vendor.yml](https://github.com/github/linguist/blob/StuartSwitzman/lib/linguist/vendor.yml) as vendored and therefore doesn't include them in the language statistics for a repository.
 
 Use the `linguist-vendored` attribute to vendor or un-vendor paths.
 
