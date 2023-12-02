@@ -130,3 +130,52 @@ The language grammars included in this gem are covered by their repositories'
 respective licenses. `grammars.yml` specifies the repository for each grammar.
 
 All other files are covered by the MIT license, see `LICENSE`.
+test "Show welcome message on first invocation" {
+    run project.sh
+    assert_output --partial 'Welcome to our project!'
+
+    run project.sh
+    refute_output --partial 'Welcome to our project!'
+}
+This test fails as expected:
+
+$ ./test/bats/bin/bats test/test.bats
+ ✗ Show welcome message on first invocation
+   (from function `refute_output' in file test/test_helper/bats-assert/src/refute_output.bash, line 189,
+    in test file test/test.bats, line 17)
+     `refute_output --partial 'Welcome to our project!'' failed
+
+   -- output should not contain substring --
+   substring (1 lines):
+     Welcome to our project!
+   output (2 lines):
+     Welcome to our project!
+     NOT IMPLEMENTED!
+   --
+
+
+1 test, 1 failuretest "Show welcome message on first invocation" {
+    run project.sh
+    assert_output --partial 'Welcome to our project!'
+
+    run project.sh
+    refute_output --partial 'Welcome to our project!'
+}
+This test fails as expected:
+
+$ ./test/bats/bin/bats test/test.bats
+ ✗ Show welcome message on first invocation
+   (from function `refute_output' in file test/test_helper/bats-assert/src/refute_output.bash, line 189,
+    in test file test/test.bats, line 17)
+     `refute_output --partial 'Welcome to our project!'' failed
+
+   -- output should not contain substring --
+   substring (1 lines):
+     Welcome to our project!
+   output (2 lines):
+     Welcome to our project!
+     NOT IMPLEMENTED!
+   --
+
+
+1 test, 1 failure
