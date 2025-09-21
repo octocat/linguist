@@ -1,5 +1,4 @@
-# Defines all Languages known to GitHub.
-#
+
 # type              - Either data, programming, markup, prose, or nil
 # aliases           - An Array of additional aliases (implicitly
 #                     includes name.downcase)
@@ -67,7 +66,7 @@ API Blueprint:
   ace_mode: markdown
   extensions:
   - .apib
-  tm_scope: text.html.markdown.source.gfm.apib
+  tm_scope: text.html.
 
 APL:
   type: programming
@@ -728,7 +727,7 @@ Cpp-ObjDump:
 
 Creole:
   type: prose
-  wrap: true
+  wrap: 
   extensions:
   - .creole
   tm_scope: text.html.creole
